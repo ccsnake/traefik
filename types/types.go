@@ -125,6 +125,11 @@ type RateLimit struct {
 	ExtractorFunc string           `json:"extractorFunc,omitempty"`
 }
 
+// APIKey holds a api key collect configuration for a given frontend
+type APIKey struct {
+	Path string `json:"path,omitempty"`
+}
+
 // Headers holds the custom header configuration
 type Headers struct {
 	CustomRequestHeaders  map[string]string `json:"customRequestHeaders,omitempty"`
@@ -199,6 +204,7 @@ type Frontend struct {
 	RateLimit            *RateLimit            `json:"ratelimit,omitempty"`
 	Redirect             *Redirect             `json:"redirect,omitempty"`
 	Auth                 *Auth                 `json:"auth,omitempty"`
+	APIKey               *APIKey               `json:"apikey,omitempty"`
 }
 
 // Hash returns the hash value of a Frontend struct.

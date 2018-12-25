@@ -53,6 +53,7 @@ func (p *Provider) buildConfiguration() *types.Configuration {
 		"getRedirect":          p.getRedirect,
 		"getErrorPages":        p.getErrorPages,
 		"getRateLimit":         p.getRateLimit,
+		"getAPIKey":            p.getAPIKey,
 		"getHeaders":           p.getHeaders,
 		"getWhiteList":         p.getWhiteList,
 
@@ -182,6 +183,18 @@ func (p *Provider) getErrorPages(rootPath string) map[string]*types.ErrorPage {
 	}
 
 	return errorPages
+}
+
+func (p *Provider) getAPIKey(rootPath string) *types.APIKey {
+	path := p.get("", rootPath, "/apikey/", "path")
+
+	if len(path) == 0 {
+		return nil
+	}
+
+	return &types.APIKey{
+		Path: path,
+	}
 }
 
 func (p *Provider) getRateLimit(rootPath string) *types.RateLimit {

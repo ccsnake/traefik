@@ -351,7 +351,7 @@ func (s *Server) buildRetryMiddleware(handler http.Handler, retry *configuration
 }
 
 func buildRateLimiter(handler http.Handler, rlConfig *types.RateLimit) (http.Handler, error) {
-	extractFunc, err := utils.NewExtractor(rlConfig.ExtractorFunc)
+	extractFunc, err := middlewares.NewExtractor(rlConfig.ExtractorFunc)
 	if err != nil {
 		return nil, err
 	}

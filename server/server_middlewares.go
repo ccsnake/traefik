@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"github.com/containous/traefik/middlewares/apikey"
 	"net/http"
 
 	"github.com/containous/traefik/configuration"
@@ -121,6 +122,18 @@ func (s *Server) buildMiddlewares(frontendName string, frontend *types.Frontend,
 
 		handler := s.wrapNegroniHandlerWithAccessLog(authMiddleware, fmt.Sprintf("Auth for %s", frontendName))
 		middle = append(middle, handler)
+	}
+
+	// api key usage
+	if frontend.APIKey != nil {
+		m, err := apikey.NewUsage(frontend.APIKey.Path)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+		handler := s.wrapNegroniHandlerWithAccessLog(m, fmt.Sprintf("collect api key usage for %s", frontendName))
+		middle = append(middle, handler)
+		log.Debugf("Adding api-key manager for frontend %s", frontendName)
+
 	}
 
 	// TLSClientHeaders
