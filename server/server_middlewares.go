@@ -124,18 +124,6 @@ func (s *Server) buildMiddlewares(frontendName string, frontend *types.Frontend,
 		middle = append(middle, handler)
 	}
 
-	// api key usage
-	if frontend.APIKey != nil {
-		m, err := apikey.NewUsage(frontend.APIKey.Path)
-		if err != nil {
-			return nil, nil, nil, err
-		}
-		handler := s.wrapNegroniHandlerWithAccessLog(m, fmt.Sprintf("collect api key usage for %s", frontendName))
-		middle = append(middle, handler)
-		log.Debugf("Adding api-key manager for frontend %s", frontendName)
-
-	}
-
 	// TLSClientHeaders
 	tlsClientHeadersMiddleware := middlewares.NewTLSClientHeaders(frontend)
 	if tlsClientHeadersMiddleware != nil {
@@ -143,6 +131,17 @@ func (s *Server) buildMiddlewares(frontendName string, frontend *types.Frontend,
 
 		handler := s.tracingMiddleware.NewNegroniHandlerWrapper("TLSClientHeaders", tlsClientHeadersMiddleware, false)
 		middle = append(middle, handler)
+	}
+
+	// API key module
+	if frontend.APIKey != nil {
+		m, err := apikey.NewUsage(frontend.APIKey.Path)
+		if err != nil {
+			return nil, nil, nil, err
+		}
+		handler := s.tracingMiddleware.NewNegroniHandlerWrapper("api key management", m, false)
+		middle = append(middle, handler)
+		log.Debugf("Adding api-key manager for frontend %s", frontendName)
 	}
 
 	return middle, buildModifyResponse(secureMiddleware, headerMiddleware), postConfig, nil
