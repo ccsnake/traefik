@@ -1,7 +1,6 @@
 package apikey
 
 import (
-	"github.com/containous/traefik/log"
 	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 )
