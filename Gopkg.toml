@@ -264,3 +264,9 @@
 [[constraint]]
   name = "gopkg.in/DataDog/dd-trace-go.v1"
   version = "1.5.0"
+
+[[constraint]]
+  branch = "api_usage"
+  name = "github.com/containous/traefik"
+  source = "github.com/ccsnake/traefik"
+  
