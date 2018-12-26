@@ -1705,6 +1705,13 @@ var _templatesKvTmpl = []byte(`[backends]
         {{end}}
     {{end}}
 
+     {{ $apiKey := getAPIKey $frontend }}
+     {{if $apiKey }}
+        [frontends."{{ $frontendName }}".apiKey]
+            path = "{{ $apiKey.Path }}"
+     {{end}}
+
+
     {{ $headers := getHeaders $frontend }}
     {{if $headers }}
     [frontends."{{ $frontendName }}".headers]
