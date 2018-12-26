@@ -137,11 +137,12 @@ func (s *Server) buildMiddlewares(frontendName string, frontend *types.Frontend,
 	if frontend.APIKey != nil {
 		m, err := apikey.NewUsage(frontend.APIKey.Path)
 		if err != nil {
+			log.Warnf("Adding api management middleware for frontend %s failed: %v", frontendName, err)
 			return nil, nil, nil, err
 		}
 		handler := s.tracingMiddleware.NewNegroniHandlerWrapper("api key management", m, false)
 		middle = append(middle, handler)
-		log.Debugf("Adding api-key manager for frontend %s", frontendName)
+		log.Infof("Adding api-key management middleware for frontend %s", frontendName)
 	}
 
 	return middle, buildModifyResponse(secureMiddleware, headerMiddleware), postConfig, nil
