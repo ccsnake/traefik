@@ -1,7 +1,10 @@
 package apikey
 
 import (
+	"bytes"
 	"fmt"
+	"github.com/tidwall/gjson"
+	"io/ioutil"
 	"net/http"
 	"strings"
 )
@@ -22,7 +25,7 @@ func buildHeaderExtractor(path string) KeyExtractorFunc {
 	}
 }
 
-func buildParamExtactor(path string) KeyExtractorFunc {
+func buildParamExtractor(path string) KeyExtractorFunc {
 	return func(r *http.Request) string {
 		qs := r.URL.Query()
 		if len(qs) == 0 {
@@ -32,17 +35,16 @@ func buildParamExtactor(path string) KeyExtractorFunc {
 	}
 }
 
-func buildBodyExtactor(path string) KeyExtractorFunc {
+func buildBodyExtractor(path string) KeyExtractorFunc {
 	return func(r *http.Request) string {
-		// buf, err := ioutil.ReadAll(r.Body)
-		// if err!=nil{
-		// 	return ""
-		// }
-		// rdr1 := ioutil.NopCloser(bytes.NewBuffer(buf))
-		// rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf))
-		// r.Body = rdr2
-		// gjson.GetBytes(buf,"path")
-		return ""
+		buf, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			return ""
+		}
+		r.Body = ioutil.NopCloser(bytes.NewBuffer(buf))
+
+		res := gjson.GetBytes(buf, path)
+		return res.String()
 	}
 }
 
@@ -54,11 +56,11 @@ func NewKeyExtractor(path string) (KeyExtractor, error) {
 	pos, rpath := ss[0], ss[1]
 	switch strings.ToLower(pos) {
 	case "param":
-		return buildParamExtactor(rpath), nil
+		return buildParamExtractor(rpath), nil
 	case "header":
 		return buildHeaderExtractor(rpath), nil
 	case "body":
-		return buildBodyExtactor(rpath), nil
+		return buildBodyExtractor(rpath), nil
 	default:
 		return nil, fmt.Errorf("create key extractor failed for unspupport position %s", ss[0])
 	}

@@ -367,8 +367,8 @@
 [[projects]]
   name = "github.com/dimchansky/utfbom"
   packages = ["."]
-  revision = "5448fe645cb1964ba70ac8f9f2ffe975e61a536c"
-  version = "v1.0.0"
+  revision = "d2133a1ce379ef6fa992b0514a77146c60db9d1c"
+  version = "v1.1.0"
 
 [[projects]]
   branch = "master"
@@ -1251,6 +1251,18 @@
   revision = "152b5d051953fdb6e45f14b6826962aadc032324"
 
 [[projects]]
+  name = "github.com/tidwall/gjson"
+  packages = ["."]
+  revision = "1e3f6aeaa5bad08d777ea7807b279a07885dd8b2"
+  version = "v1.1.3"
+
+[[projects]]
+  name = "github.com/tidwall/match"
+  packages = ["."]
+  revision = "33827db735fff6510490d69a8622612558a557ed"
+  version = "v1.0.1"
+
+[[projects]]
   branch = "master"
   name = "github.com/timewasted/linode"
   packages = [
@@ -1858,6 +1870,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "26517fdb01d55f549e4692c251587c90f657b7736e2951d673a530f3b86a90fb"
+  inputs-digest = "f616b9e00b4e5435913f62a8b158c634f5aa7d1beb04e33a3c9e77d8f4184cc9"
   solver-name = "gps-cdcl"
   solver-version = 1
